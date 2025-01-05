@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SpotPdv.Shell.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:initializers="clr-namespace:SpotPdv.Shell.Pages"
+    xmlns:tabs="clr-namespace:SpotPdv.Shell.Pages"
+    xmlns:viewModels="clr-namespace:SpotPdv.Application.ViewModels;assembly=SpotPdv.Application"
+    Title="SpotPdv"
+    x:DataType="viewModels:ShellViewModel"
+    Shell.FlyoutBehavior="Flyout">
+
+    <FlyoutItem Title="Venda/Pedido" Icon="cart.png">
+        <ShellContent
+            BindingContext="{Binding MarketplaceViewModel}"
+            ContentTemplate="{DataTemplate tabs:MarketplacePage}"
+            Route="MarketplaceViewModel" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Gerenciar produtos" Icon="products.png">
+        <ShellContent
+            BindingContext="{Binding ManageProductViewModel}"
+            ContentTemplate="{DataTemplate tabs:ManageProductPage}"
+            Route="ManageProductPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Caixa" Icon="cashier.png">
+        <ShellContent
+            BindingContext="{Binding CashierViewModel}"
+            ContentTemplate="{DataTemplate tabs:CashierPage}"
+            Route="CashierPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Controle de estoque" Icon="stock.png">
+        <ShellContent
+            BindingContext="{Binding StockManagerViewModel}"
+            ContentTemplate="{DataTemplate tabs:StockManagerPage}"
+            Route="StockManagerPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Histórico de vendas" Icon="relatorio.png">
+        <ShellContent
+            BindingContext="{Binding SalesLogViewModel}"
+            ContentTemplate="{DataTemplate tabs:SalesLogPage}"
+            Route="SalesLogPage" />
+    </FlyoutItem>
+
+    <ShellContent
+        BindingContext="{Binding MainViewModel}"
+        ContentTemplate="{DataTemplate initializers:MainPage}"
+        Route="MainPage"
+        Shell.FlyoutBehavior="Disabled"
+        Shell.FlyoutItemIsVisible="False"
+        Shell.NavBarIsVisible="False" />
+
+    <ShellContent
+        Title="Login de operador"
+        BindingContext="{Binding AdministrationLoginViewModel}"
+        ContentTemplate="{DataTemplate initializers:AdministrationLoginPage}"
+        Route="OperatorLoginPage"
+        Shell.FlyoutBehavior="Disabled"
+        Shell.FlyoutItemIsVisible="False" />
+
+    <ShellContent
+        Title="Login de operador"
+        BindingContext="{Binding OperatorLoginViewModel}"
+        ContentTemplate="{DataTemplate initializers:OperatorLoginPage}"
+        Route="OperatorLoginPage"
+        Shell.FlyoutBehavior="Disabled"
+        Shell.FlyoutItemIsVisible="False" />
+
+
+</Shell>

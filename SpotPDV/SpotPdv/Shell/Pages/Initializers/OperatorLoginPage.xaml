@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SpotPdv.Shell.Pages.OperatorLoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:SpotPdv.Application.ViewModels;assembly=SpotPdv.Application"
+    Title="OperatorLoginPage"
+    x:DataType="viewModels:OperatorLoginViewModel">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid Padding="20,20,20,10" RowSpacing="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Padding="20,100,20,100">
+            <Image Source="operador.png" />
+        </Grid>
+        <ScrollView Grid.Row="0" Grid.Column="1">
+            <VerticalStackLayout Padding="0,50,0,50">
+                <Label FontSize="Medium" Text="Opa... nenhum operador adicionado! " />
+                <Label
+                    Margin="0,20,0,20"
+                    FontSize="Caption"
+                    Text="Para começar, vamos configurar um novo operador!" />
+
+                <VerticalStackLayout Spacing="20">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Caption"
+                        Text="Operador" />
+                    <Border StrokeShape="RoundRectangle 6">
+                        <Entry Text="{Binding NewOperatorLoginModel.Name}" TextChanged="Entry_TextChanged" />
+                    </Border>
+
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="Caption"
+                        Text="Senha" />
+                    <Border StrokeShape="RoundRectangle 6">
+                        <Entry
+                            IsPassword="True"
+                            Text="{Binding NewOperatorLoginModel.Password}"
+                            TextChanged="Entry_TextChanged" />
+                    </Border>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+        <VerticalStackLayout
+            Grid.Row="1"
+            Grid.Column="1"
+            Spacing="10"
+            VerticalOptions="Center">
+            <Button
+                Command="{Binding CreateOperatorCommand}"
+                CornerRadius="6"
+                FontAttributes="Bold"
+                HorizontalOptions="Fill"
+                IsEnabled="{Binding ErroVisible, Converter={StaticResource InvertedBoolConverter}}"
+                Text="Adicionar operador"
+                VerticalOptions="Center" />
+            <Label
+                IsVisible="{Binding ErroVisible}"
+                Text="{Binding ErroMessage}"
+                TextColor="Red"
+                VerticalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SpotPdv.Shell.Pages.ManageProductPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:SpotPdv.Converters"
+    xmlns:model="clr-namespace:SpotPdv.Application.Models;assembly=SpotPdv.Application"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModels="clr-namespace:SpotPdv.Application.ViewModels;assembly=SpotPdv.Application"
+    x:DataType="viewModels:ManageProductViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:HexToBrushConverter x:Key="HexToBrushConverter" />
+            <toolkit:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <ScrollView Padding="10">
+            <Grid Padding="5" RowSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.ColumnSpan="2"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalOptions="Center"
+                    Text="Categorias e Produtos"
+                    VerticalOptions="Center" />
+                <Picker
+                    x:Name="picker"
+                    Grid.Row="1"
+                    BindingContextChanged="picker_BindingContextChanged"
+                    FontAttributes="Bold"
+                    ItemsSource="{Binding ChooseProductType}"
+                    SelectedItem="{Binding ProductTypeSelected}" />
+
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    BackgroundColor="ForestGreen"
+                    Command="{Binding OpenNewProductCommand}"
+                    FontAttributes="Bold"
+                    HorizontalOptions="End"
+                    Text="Adicionar uma nova categoria"
+                    VerticalOptions="Center">
+                    <Button.Triggers>
+                        <DataTrigger
+                            Binding="{Binding ModeProductSelected}"
+                            TargetType="Button"
+                            Value="True">
+                            <Setter Property="Text" Value="Adicionar produto" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding ModeProductSelected}"
+                            TargetType="Button"
+                            Value="False">
+                            <Setter Property="Text" Value="Adicionar categoria" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+
+                <CollectionView
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    IsVisible="{Binding ModeProductSelected, Converter={StaticResource InvertedBoolConverter}}"
+                    ItemsSource="{Binding CategoriesView}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="20"
+                            Orientation="Vertical"
+                            Span="2"
+                            VerticalItemSpacing="20" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Category">
+                            <Border
+                                BackgroundColor="{Binding Color.Color}"
+                                HeightRequest="60"
+                                Stroke="Transparent"
+                                StrokeShape="RoundRectangle 6"
+                                StrokeThickness="2">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Stroke="Transparent">
+                                        <Grid>
+                                            <Image
+                                                Margin="0,10,0,10"
+                                                HorizontalOptions="Center"
+                                                IsVisible="{Binding IconChoose, Converter={StaticResource InvertedBoolConverter}}"
+                                                Source="{Binding Image.Image, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                                                VerticalOptions="Center"
+                                                WidthRequest="50" />
+                                            <Label
+                                                Padding="20,0,20,0"
+                                                FontFamily="AwesomeDuotone"
+                                                FontSize="30"
+                                                HorizontalOptions="Center"
+                                                IsVisible="{Binding IconChoose}"
+                                                Text="{Binding Icon}"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                    <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Start"
+                                        HorizontalTextAlignment="Start"
+                                        Text="{Binding Name}"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <CollectionView
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    IsVisible="{Binding ModeProductSelected}"
+                    ItemsSource="{Binding ProductsView}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="20"
+                            Orientation="Vertical"
+                            Span="4"
+                            VerticalItemSpacing="20" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Product">
+                            <Grid MaximumWidthRequest="200">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height=".2*" />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="100"
+                                    StrokeShape="RoundRectangle 6"
+                                    StrokeThickness="1">
+                                    <Grid>
+                                        <Image
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Margin="0,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Source="{Binding Image.Image, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                                            VerticalOptions="Center" />
+                                        <Grid BackgroundColor="Black" Opacity=".5" />
+
+                                        <Label
+                                            Grid.Row="1"
+                                            HorizontalOptions="Center"
+                                            HorizontalTextAlignment="Justify"
+                                            LineBreakMode="WordWrap"
+                                            MaxLines="4"
+                                            Text="{Binding ReducedName}"
+                                            TextColor="White"
+                                            VerticalOptions="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding ReducedName, TargetNullValue=''}"
+                                                    TargetType="Label"
+                                                    Value="">
+                                                    <Setter Property="Text" Value="{Binding Name}" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Grid>
+                                </Border>
+
+                                <Label
+                                    Grid.Row="1"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Price, StringFormat='R$ {0:N2}'}" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </ScrollView>
+        <Grid IsVisible="{Binding CardNewProduct}">
+            <Grid BackgroundColor="Black" Opacity=".7">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenNewProductCommand}" />
+                </Grid.GestureRecognizers>
+            </Grid>
+            <Border
+                Margin="60"
+                BackgroundColor="White"
+                IsVisible="{Binding ModeProductSelected, Converter={StaticResource InvertedBoolConverter}}"
+                Stroke="ForestGreen"
+                StrokeShape="RoundRectangle 6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".2*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        Text="Nova Categoria"
+                        VerticalOptions="Center" />
+                    <ScrollView Grid.Row="1">
+                        <VerticalStackLayout Padding="10" Spacing="10">
+                            <Grid ColumnSpacing="30">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border StrokeShape="RoundRectangle 6" VerticalOptions="Start">
+                                    <Entry Placeholder="Nome" Text="{Binding NameCategory}" />
+                                </Border>
+                                <toolkit:Expander Grid.Column="1" IsExpanded="{Binding ColorExpaderVisible}">
+                                    <toolkit:Expander.Header>
+                                        <VerticalStackLayout>
+                                            <Label
+                                                FontFamily="AwesomeDuotone"
+                                                FontSize="22"
+                                                HorizontalOptions="Center"
+                                                Text="&#xf339;" />
+                                            <HorizontalStackLayout Spacing="20">
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="11"
+                                                    HorizontalOptions="Center"
+                                                    Text="Cor de fundo"
+                                                    VerticalOptions="Center" />
+                                                <Border
+                                                    BackgroundColor="{Binding ColorCategorySelected.Color}"
+                                                    HeightRequest="20"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="20">
+                                                    <Border.StrokeShape>
+                                                        <Ellipse />
+                                                    </Border.StrokeShape>
+                                                </Border>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+                                    </toolkit:Expander.Header>
+                                    <ScrollView
+                                        Padding="10"
+                                        HeightRequest="150"
+                                        HorizontalOptions="Center">
+                                        <CollectionView
+                                            ItemsSource="{Binding BackgroundCategory}"
+                                            SelectedItem="{Binding ColorCategorySelected}"
+                                            SelectionMode="Single">
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout ItemSpacing="8" Orientation="Vertical" />
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="model:BackgroundCategoryModel">
+                                                    <Border
+                                                        BackgroundColor="{Binding Color}"
+                                                        HeightRequest="20"
+                                                        WidthRequest="20">
+                                                        <Border.StrokeShape>
+                                                            <Ellipse />
+                                                        </Border.StrokeShape>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </ScrollView>
+                                </toolkit:Expander>
+                            </Grid>
+                            <Label FontSize="11" Text="Selecione ou faça o upload de uma imagem (Opcional)" />
+                            <Grid ColumnSpacing="30">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <CollectionView
+                                    x:Name="collectionIcons"
+                                    HorizontalScrollBarVisibility="Never"
+                                    ItemsSource="{Binding FoodIconCodes}"
+                                    SelectionMode="Single">
+                                    <CollectionView.ItemsLayout>
+                                        <GridItemsLayout HorizontalItemSpacing="5" Orientation="Horizontal" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="sys:String">
+                                            <Border
+                                                Padding="1"
+                                                HeightRequest="60"
+                                                StrokeShape="RoundRectangle 6"
+                                                WidthRequest="60">
+                                                <Grid Padding="1">
+                                                    <Border
+                                                        BackgroundColor="White"
+                                                        Stroke="Transparent"
+                                                        StrokeShape="RoundRectangle 6">
+                                                        <Label
+                                                            FontFamily="AwesomeDuotone"
+                                                            FontSize="20"
+                                                            HorizontalOptions="Center"
+                                                            Text="{Binding .}"
+                                                            TextColor="Black"
+                                                            VerticalOptions="Center" />
+                                                    </Border>
+                                                </Grid>
+                                                <VisualStateManager.VisualStateGroups>
+                                                    <VisualStateGroup x:Name="CommonStates">
+                                                        <VisualState x:Name="Normal">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="BackgroundColor" Value="Transparent" />
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                        <VisualState x:Name="Selected">
+                                                            <VisualState.Setters>
+                                                                <Setter Property="BackgroundColor" Value="#512BD4" />
+                                                            </VisualState.Setters>
+                                                        </VisualState>
+                                                    </VisualStateGroup>
+                                                </VisualStateManager.VisualStateGroups>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                                <Button
+                                    Grid.Column="1"
+                                    Padding="22,0,22,0"
+                                    Command="{Binding OpenFileCommand}"
+                                    CornerRadius="6"
+                                    FontAttributes="Bold"
+                                    FontFamily="AwesomeDuotone"
+                                    FontSize="20"
+                                    Text="&#x10e054;" />
+                                <Image
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,10,0,0"
+                                    HorizontalOptions="Center"
+                                    Source="{Binding ImageSelected.Image, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="50" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                    <Button
+                        Grid.Row="2"
+                        Margin="50,20,50,20"
+                        Command="{Binding AddNewCategoryCommand}"
+                        FontAttributes="Bold"
+                        Text="Criar categoria" />
+                </Grid>
+            </Border>
+            <Border
+                Margin="60"
+                BackgroundColor="White"
+                IsVisible="{Binding ModeProductSelected}"
+                Stroke="ForestGreen"
+                StrokeShape="RoundRectangle 6">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".2*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        Text="Novo produto"
+                        VerticalOptions="Center" />
+                    <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Always">
+                        <VerticalStackLayout Padding="10" Spacing="10">
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="11"
+                                    Text="Nome*" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontSize="11"
+                                    Text="Nome reduzido" />
+                            </Grid>
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    Grid.Column="0"
+                                    StrokeShape="RoundRectangle 6"
+                                    VerticalOptions="Start">
+                                    <Entry Placeholder="Nome" Text="{Binding NameProduct}" />
+                                </Border>
+                                <Border
+                                    Grid.Column="1"
+                                    StrokeShape="RoundRectangle 6"
+                                    VerticalOptions="Start">
+                                    <Entry Placeholder="Nome reduzido" Text="{Binding ReducedNameProduct}" />
+                                </Border>
+                            </Grid>
+                            <Label
+                                Grid.Column="0"
+                                FontSize="11"
+                                Text="Informações adicionais" />
+                            <Border
+                                Grid.Column="1"
+                                StrokeShape="RoundRectangle 6"
+                                VerticalOptions="Start">
+                                <Editor Placeholder="Informações adicionais" Text="{Binding ProductDetails}" />
+                            </Border>
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="11"
+                                    Text="Categoria*" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontSize="11"
+                                    Text="Unidade*" />
+                            </Grid>
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <toolkit:Expander IsExpanded="{Binding ColorExpaderVisible}">
+                                    <toolkit:Expander.Header>
+                                        <Border HeightRequest="45" StrokeShape="RoundRectangle 6">
+                                            <Grid VerticalOptions="Center">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <Label
+                                                    Padding="10,0,0,0"
+                                                    FontAttributes="Bold"
+                                                    FontSize="11"
+                                                    HorizontalOptions="Start"
+                                                    Text="Selecione uma categoria"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Padding="10,0,10,0"
+                                                    FontFamily="AwesomeDuotone"
+                                                    FontSize="10"
+                                                    HorizontalOptions="Center"
+                                                    Text="&#xf078;"
+                                                    VerticalOptions="Center" />
+                                            </Grid>
+                                        </Border>
+                                    </toolkit:Expander.Header>
+                                    <ScrollView
+                                        Padding="10"
+                                        HeightRequest="150"
+                                        HorizontalOptions="Center">
+                                        <CollectionView
+                                            ItemsSource="{Binding CategoriesView}"
+                                            SelectedItem="{Binding CategorySelected}"
+                                            SelectionMode="Single">
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout ItemSpacing="8" Orientation="Vertical" />
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="model:Category">
+                                                    <Border Padding="1" StrokeShape="RoundRectangle 6">
+                                                        <Border
+                                                            Padding="5"
+                                                            BackgroundColor="White"
+                                                            Stroke="Transparent"
+                                                            StrokeShape="RoundRectangle 6">
+                                                            <Label Text="{Binding Name}" TextColor="{Binding Color.Color}" />
+                                                        </Border>
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup x:Name="CommonStates">
+                                                                <VisualState x:Name="Normal">
+                                                                    <VisualState.Setters>
+                                                                        <Setter Property="BackgroundColor" Value="Transparent" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                                <VisualState x:Name="Selected">
+                                                                    <VisualState.Setters>
+                                                                        <Setter Property="BackgroundColor" Value="#512BD4" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </ScrollView>
+                                </toolkit:Expander>
+
+                                <Picker
+                                    Grid.Column="1"
+                                    HeightRequest="40"
+                                    ItemsSource="{Binding Units}"
+                                    SelectedItem="{Binding UnitSelected}"
+                                    VerticalOptions="Start" />
+                            </Grid>
+                            <Label
+                                Grid.Column="0"
+                                FontSize="11"
+                                Text="Código de barras (opcional)" />
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    Grid.Column="0"
+                                    StrokeShape="RoundRectangle 6"
+                                    VerticalOptions="Start">
+                                    <Entry Placeholder="Código de barras" Text="{Binding BarCode}" />
+                                </Border>
+                                <Button
+                                    Grid.Column="1"
+                                    CornerRadius="6"
+                                    FontAttributes="Bold"
+                                    FontFamily="AwesomeDuotone"
+                                    FontSize="20"
+                                    IsEnabled="False"
+                                    Text="&#xf464;"
+                                    TextColor="White" />
+                            </Grid>
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="11"
+                                    Text="Preço*" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontSize="11"
+                                    Text="Desconto (%)" />
+                            </Grid>
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    Grid.Column="0"
+                                    StrokeShape="RoundRectangle 6"
+                                    VerticalOptions="Start">
+                                    <Entry
+                                        Keyboard="Numeric"
+                                        Placeholder="Preço R$"
+                                        Text="{Binding ProductPrice, StringFormat='R$ {0:N2}'}" />
+                                </Border>
+                                <Border
+                                    Grid.Column="1"
+                                    StrokeShape="RoundRectangle 6"
+                                    VerticalOptions="Start">
+                                    <Entry Placeholder="Desconto %" Text="{Binding ProductDiscount}" />
+                                </Border>
+                            </Grid>
+                            <Grid ColumnSpacing="20" RowSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="11"
+                                    Text="Qtde. no estoque" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontSize="11"
+                                    Text="Ativo" />
+                                <Label
+                                    Grid.Column="2"
+                                    FontSize="11"
+                                    Text="Imagem" />
+
+                                <Border
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    StrokeShape="RoundRectangle 6"
+                                    VerticalOptions="Start">
+                                    <Entry
+                                        Keyboard="Numeric"
+                                        Placeholder="Qtde."
+                                        Text="{Binding QtdStock}" />
+                                </Border>
+                                <Switch
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    IsToggled="{Binding IsAvailable}" />
+                                <Button
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Padding="22,0,22,0"
+                                    Command="{Binding OpenFileCommand}"
+                                    CornerRadius="6"
+                                    FontAttributes="Bold"
+                                    FontFamily="AwesomeDuotone"
+                                    FontSize="20"
+                                    Text="&#x10e054;" />
+                                <Image
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    Margin="0,10,0,0"
+                                    HorizontalOptions="Center"
+                                    Source="{Binding ProductImageSelected.Image, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="50" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                    <Button
+                        Grid.Row="2"
+                        Margin="50,20,50,20"
+                        Command="{Binding AddNewProductCommand}"
+                        FontAttributes="Bold"
+                        Text="Criar produto" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

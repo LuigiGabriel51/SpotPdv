@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SpotPdv.Shell.Pages.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:SpotPdv.Application.ViewModels;assembly=SpotPdv.Application"
+    x:DataType="viewModels:MainViewModel"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.NavBarHasShadow="False"
+    Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <Image Aspect="AspectFit" Source="dotnet_bot.png" />
+        <Grid IsVisible="True">
+            <Grid
+                BackgroundColor="Black"
+                HorizontalOptions="Fill"
+                Opacity=".90"
+                VerticalOptions="Fill" />
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <ActivityIndicator
+                    BackgroundColor="Transparent"
+                    IsRunning="True"
+                    Color="White" />
+                <Label Text="{Binding LoadingMessage}" TextColor="White" />
+            </VerticalStackLayout>
+
+        </Grid>
+    </Grid>
+
+</ContentPage>

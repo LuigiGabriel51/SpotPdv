@@ -1,0 +1,13 @@
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\bin\Debug\net9.0\SpotPdv.Application.deps.json
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\bin\Debug\net9.0\SpotPdv.Application.dll
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\bin\Debug\net9.0\SpotPdv.Application.pdb
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.csproj.AssemblyReference.cache
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.AssemblyInfoInputs.cache
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.AssemblyInfo.cs
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.csproj.CoreCompileInputs.cache
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.sourcelink.json
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.dll
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\refint\SpotPdv.Application.dll
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\SpotPdv.Application.pdb
+D:\IFMA\SpotPdv\SpotPDV\SpotPdv.Application\obj\Debug\net9.0\ref\SpotPdv.Application.dll
