@@ -295,6 +295,7 @@
                                     x:Name="collectionIcons"
                                     HorizontalScrollBarVisibility="Never"
                                     ItemsSource="{Binding FoodIconCodes}"
+                                    SelectedItem="{Binding IconSelected}"
                                     SelectionMode="Single">
                                     <CollectionView.ItemsLayout>
                                         <GridItemsLayout HorizontalItemSpacing="5" Orientation="Horizontal" />
