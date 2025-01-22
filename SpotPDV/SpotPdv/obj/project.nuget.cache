@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tI1Tk7D42Kc=",
+  "dgSpecHash": "gzdV8qhcnZM=",
   "success": true,
-  "projectFilePath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv\\SpotPdv.csproj",
+  "projectFilePath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv\\SpotPdv.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\luigi\\.nuget\\packages\\asyncawaitbestpractices\\9.0.0\\asyncawaitbestpractices.9.0.0.nupkg.sha512",
     "C:\\Users\\luigi\\.nuget\\packages\\communitytoolkit.maui\\9.0.0\\communitytoolkit.maui.9.0.0.nupkg.sha512",

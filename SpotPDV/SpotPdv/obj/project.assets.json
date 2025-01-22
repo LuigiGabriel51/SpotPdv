@@ -62451,11 +62451,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv\\SpotPdv.csproj",
+      "projectUniqueName": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv\\SpotPdv.csproj",
       "projectName": "SpotPdv",
-      "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv\\SpotPdv.csproj",
+      "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv\\SpotPdv.csproj",
       "packagesPath": "C:\\Users\\luigi\\.nuget\\packages\\",
-      "outputPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv\\obj\\",
+      "outputPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [
@@ -62482,44 +62482,44 @@
         "net9.0-android35.0": {
           "targetAlias": "net9.0-android",
           "projectReferences": {
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
             },
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
             }
           }
         },
         "net9.0-ios18.1": {
           "targetAlias": "net9.0-ios",
           "projectReferences": {
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
             },
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
             }
           }
         },
         "net9.0-maccatalyst18.1": {
           "targetAlias": "net9.0-maccatalyst",
           "projectReferences": {
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
             },
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
             }
           }
         },
         "net9.0-windows10.0.19041": {
           "targetAlias": "net9.0-windows10.0.19041.0",
           "projectReferences": {
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj"
             },
-            "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
-              "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
+            "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj": {
+              "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Infrastructure\\SpotPdv.Infrastructure.csproj"
             }
           }
         }

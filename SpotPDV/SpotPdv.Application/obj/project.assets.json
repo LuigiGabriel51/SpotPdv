@@ -1659,11 +1659,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj",
+      "projectUniqueName": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj",
       "projectName": "SpotPdv.Application",
-      "projectPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj",
+      "projectPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\SpotPdv.Application.csproj",
       "packagesPath": "C:\\Users\\luigi\\.nuget\\packages\\",
-      "outputPath": "D:\\IFMA\\SpotPdv\\SpotPDV\\SpotPdv.Application\\obj\\",
+      "outputPath": "D:\\IFMA\\SPOTPDV_\\SpotPdv\\SpotPDV\\SpotPdv.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
