@@ -10,6 +10,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,17 @@ namespace SpotPdv.Application.ViewModels
 {
     public partial class ManageProductViewModel : BaseViewModel
     {
+        private bool isOpenExpander;
+
+        [ObservableProperty]
+        private bool _currentProductsOpened;
+
+        [ObservableProperty]
+        private string _titleCurrentCategoryOpened;
+
+        [ObservableProperty]
+        private bool _expanderVisible;
+
         public ManageProductViewModel
             (
                 INavigationService navigationService, IOperationStateService operationStateService
@@ -27,6 +39,7 @@ namespace SpotPdv.Application.ViewModels
                 navigationService, operationStateService
             )
         {
+            ProductsFiltered = [];
             BackgroundCategory = Converters.GenerateRandomColors(100).ToObservableCollection();
             FoodIconCodes = IconsCategory;
         }
@@ -46,9 +59,6 @@ namespace SpotPdv.Application.ViewModels
         private bool _modeProductSelected;
 
         [ObservableProperty]
-        private bool _ColorExpaderVisible;
-
-        [ObservableProperty]
         private ObservableCollection<string> _chooseProductType = ["Categorias", "Produtos"];
 
         [ObservableProperty]
@@ -65,7 +75,7 @@ namespace SpotPdv.Application.ViewModels
         private BackgroundCategoryModel _colorCategorySelected;
         partial void OnColorCategorySelectedChanged(BackgroundCategoryModel value)
         {
-            ColorExpaderVisible = false;
+            ExpanderVisible = false;
             AddNewCategoryCommand?.NotifyCanExecuteChanged();
         }
 
@@ -93,8 +103,12 @@ namespace SpotPdv.Application.ViewModels
         [ObservableProperty]
         private ObservableCollection<BackgroundCategoryModel> _backgroundCategory;
 
+        [ObservableProperty]
+        private bool _visibleCategoryEdit;
+        
+        [ObservableProperty]
+        private Category _categoryBeingEdited;
         #endregion 
-
 
         #region Products
 
@@ -142,8 +156,8 @@ namespace SpotPdv.Application.ViewModels
         }
 
         [ObservableProperty]
-        private decimal _productPrice;
-        partial void OnProductPriceChanged(decimal value)
+        private string _productPrice;
+        partial void OnProductPriceChanged(string value)
         {
             AddNewProductCommand?.NotifyCanExecuteChanged();
         }
@@ -163,11 +177,93 @@ namespace SpotPdv.Application.ViewModels
         [ObservableProperty]
         private BackgroundCategoryModel _productColorSelected;
 
-        #endregion
+        [ObservableProperty]
+        private bool _visibleProductEdit;
+
+        [ObservableProperty]
+        private Product _productsBeingEdited;
         partial void OnProductTypeSelectedChanged(string value)
         {
             ChangeViewMode(value);
         }
+
+        #endregion
+
+        #region Incialização e reinicialização
+        protected override void InitializeViewModel()
+        {
+            base.InitializeViewModel();
+            Task.Run(() =>
+            {
+                if (OperationState.CurrentCategories == null || OperationState.CurrentProducts == null)
+                {
+                    if (OperationState.CurrentCategories == null) OperationState.CurrentCategories = new ObservableCollection<Category>();
+                    if (OperationState.CurrentProducts == null) OperationState.CurrentProducts = new ObservableCollection<Product>();
+                    OperationStateService.SaveOperationState(OperationState).SafeFireAndForget();
+                }
+                ConteinerView = new ObservableCollection<DataContainer>();
+
+                foreach (var category in OperationState.CurrentCategories)
+                {
+                    var productsCurrentCategory = new List<Product>();
+                    foreach (var product in OperationState.CurrentProducts)
+                    {
+                        if (product.CategoryId == category.CategoryId)
+                        {
+                            productsCurrentCategory.Add(product);
+                        }
+                    }
+                    ConteinerView.Add(new DataContainer() { Category = category, Products = productsCurrentCategory.ToObservableCollection() });
+                }
+
+                Categories = OperationState.CurrentCategories;
+                Products = OperationState.CurrentProducts;
+                ViewModelIsInitialized = true;
+            });         
+        }
+
+        public override void RefreshPage(OperationStateModel operationStateModel, bool filterForAZ = false)
+        {
+            base.RefreshPage(operationStateModel, filterForAZ);
+
+            if (ViewModelIsInitialized)
+            {
+                ConteinerView.Clear();
+                var conteinerView = new List<DataContainer>();
+
+                foreach (var category in OperationState.CurrentCategories)
+                {
+                    var productsCurrentCategory = new List<Product>();
+                    foreach (var product in OperationState.CurrentProducts)
+                    {
+                        if (product.CategoryId == category.CategoryId)
+                        {
+                            productsCurrentCategory.Add(product);
+                        }
+                    }
+                    conteinerView.Add(new DataContainer() { Category = category, Products = productsCurrentCategory.ToObservableCollection() });
+                }
+
+                if (filterForAZ)
+                {
+                    ConteinerView = conteinerView.OrderBy(x => x.Category.Name).ToObservableCollection();
+                }
+                else
+                {
+                    ConteinerView = conteinerView.OrderBy(x => x.Category.DateTimeCreate).ToObservableCollection();
+                }
+
+                Categories = OperationState.CurrentCategories;
+                Products = OperationState.CurrentProducts;
+            }
+            else
+            {
+                InitializeViewModel();
+            }
+
+            MainThread.BeginInvokeOnMainThread(() => IsLoading = false);
+        }
+        #endregion
 
         private void ChangeViewMode(string value)
         {
@@ -182,49 +278,113 @@ namespace SpotPdv.Application.ViewModels
             }
         }
 
-        protected override void InitializeViewModel()
+        #region Filtro de produtos
+
+        private CancellationTokenSource _debounceCts;
+
+        [ObservableProperty]
+        private string _productSearchText;
+        partial void OnProductSearchTextChanged(string value)
         {
-            base.InitializeViewModel();
-            if (OperationState.CurrentCategories == null || OperationState.CurrentProducts == null)
-            {
-                if(OperationState.CurrentCategories == null)  OperationState.CurrentCategories = new ObservableCollection<Category>();
-                if(OperationState.CurrentProducts == null)  OperationState.CurrentProducts = new ObservableCollection<Product>();
-                OperationStateService.SaveOperationState(OperationState).SafeFireAndForget();
-            }
-            CategoriesView = OperationState.CurrentCategories;
-            ProductsView = OperationState.CurrentProducts;
-            Categories = CategoriesView;
-            Products = ProductsView;
-            ViewModelIsInitialized = true;
+            OnNameFilteredProduct(value);
         }
 
-        public override void RefreshPage(OperationStateModel operationStateModel)
+        [ObservableProperty]
+        private bool _filterProducts;
+
+        [ObservableProperty]
+        private ObservableCollection<Product> _productsFiltered;
+
+        private void OnNameFilteredProduct(string value)
         {
-            base.RefreshPage(operationStateModel);
-            if(ViewModelIsInitialized)
+            _debounceCts?.Cancel();
+            _debounceCts = new CancellationTokenSource();
+
+            if (string.IsNullOrEmpty(value))
             {
-                CategoriesView = OperationState.CurrentCategories;
-                ProductsView = OperationState.CurrentProducts;
+                FilterProducts = false;
+                return;
+            }
+
+            _ = DebouncedFilterProducts(_debounceCts.Token);
+        }
+
+        private async Task DebouncedFilterProducts(CancellationToken token)
+        {
+            try
+            {
+                await Task.Delay(700, token);
+
+                token.ThrowIfCancellationRequested();
+
+                ExecuteFilterProducts();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($" ### ERROR ### {GetType().Name}: {ex}");
+            }
+        }
+
+        private void ExecuteFilterProducts()
+        {
+            ProductsFiltered.Clear();
+            if (!string.IsNullOrEmpty(ProductSearchText?.Trim()))
+            {
+                var products = OperationState.CurrentProducts
+                    .Where(x => x.Name.ToUpper().Contains(ProductSearchText.ToUpper()))
+                    .ToList();
+
+                products.ForEach(ProductsFiltered.Add);
+                IsLoading = false;
+                if (ProductsFiltered.Count > 0) FilterProducts = true;
+                else FilterProducts = false;
             }
             else
             {
-                InitializeViewModel();
+                FilterProducts = false;
             }
         }
+
+        [RelayCommand]
+        private void CloseFilter()
+        {
+            FilterProducts = false;
+            ProductSearchText = string.Empty;
+        }
+
+        #endregion
+
+        #region Commandos de abertura
 
         [RelayCommand]
         private void OpenNewProduct()
         {
             CardNewProduct = !CardNewProduct;
-            if (ModeProductSelected)
-            {
+            ModeProductSelected = true;
+        }
 
-            }
-            else
+        [RelayCommand]
+        private void OpenNewCategory()
+        {
+            CardNewProduct = !CardNewProduct;
+            ModeProductSelected = false;
+            NewCategories = new Category();
+            NameCategory = string.Empty;
+            ImageSelected = null;
+        }
+
+        [RelayCommand]
+        private void OpenCurrentProduct(DataContainer dataContainer)
+        {
+            CurrentProductsOpened = !CurrentProductsOpened;
+            if (CurrentProductsOpened)
             {
-                NewCategories = new Category();
-                NameCategory = string.Empty;
-                ImageSelected = null;
+                TitleCurrentCategoryOpened = dataContainer.Category.Name;
+                Products.Clear();
+                foreach (var item in dataContainer.Products)
+                {
+                    Products.Add(item);
+                }
             }
         }
 
@@ -254,6 +414,94 @@ namespace SpotPdv.Application.ViewModels
             }        
         }
 
+        #endregion
+
+        #region Modo de edição
+
+        [ObservableProperty]
+        private Category _categorySelectedCategoryForProduct;
+
+        [RelayCommand]
+        private void OpenEditCategory(DataContainer dataContainer)
+        {
+            VisibleCategoryEdit = !VisibleCategoryEdit;
+            if (VisibleCategoryEdit)
+            {
+                CategoryBeingEdited = dataContainer.Category.Clone(dataContainer.Category);
+            }
+        }
+
+        [RelayCommand]
+        private void OpenEditProduct(Product product)
+        {
+            VisibleProductEdit = !VisibleProductEdit;
+            if (VisibleProductEdit)
+            {
+                ProductsBeingEdited = product.Clone(product);
+            }
+        }
+
+        [RelayCommand]
+        private async Task SaveCategory()
+        {
+            var updateCategory = OperationState.CurrentCategories.Where(x => x.CategoryId == CategoryBeingEdited.CategoryId).FirstOrDefault();
+            updateCategory.CategoryId = CategoryBeingEdited.CategoryId;
+            updateCategory.Color = CategoryBeingEdited.Color;
+            updateCategory.DateTimeCreate = CategoryBeingEdited.DateTimeCreate;
+            updateCategory.Icon = CategoryBeingEdited.Icon;
+            updateCategory.Name = CategoryBeingEdited.Name;
+            await OperationStateService.SaveOperationState(OperationState);
+            VisibleCategoryEdit = false;
+            RefreshPage(OperationState);
+        }
+
+        [RelayCommand]
+        private async Task DeleteCategory()
+        {
+            var updateCategory = OperationState.CurrentCategories.Where(x => x.CategoryId == CategoryBeingEdited.CategoryId).FirstOrDefault();
+            OperationState.CurrentCategories.Remove(updateCategory);
+            VisibleCategoryEdit = false;
+            await OperationStateService.SaveOperationState(OperationState);
+            RefreshPage(OperationState);
+        }
+
+        [RelayCommand]
+        private async Task SaveProduct()
+        {
+            var updateProduct = OperationState.CurrentProducts.Where(x => x.ProductId == ProductsBeingEdited.ProductId).FirstOrDefault();
+            updateProduct.Name = ProductsBeingEdited.Name;
+            updateProduct.ReducedName = ProductsBeingEdited.ReducedName;
+            updateProduct.Category = CategorySelectedCategoryForProduct != null ? CategorySelectedCategoryForProduct.Name: updateProduct.Category;
+            updateProduct.Description = ProductsBeingEdited.Description;
+            updateProduct.Barcode = ProductsBeingEdited.Barcode;
+            updateProduct.Price = ProductsBeingEdited.Price;
+            updateProduct.CategoryId = CategorySelectedCategoryForProduct != null ? CategorySelectedCategoryForProduct.CategoryId: updateProduct.CategoryId;
+            updateProduct.Discount = ProductsBeingEdited.Discount;
+            updateProduct.StockQuantity = ProductsBeingEdited.StockQuantity;
+            updateProduct.IsAvailable = ProductsBeingEdited.IsAvailable;
+            updateProduct.Image = ProductsBeingEdited.Image;
+            updateProduct.Color = ProductsBeingEdited.Color;
+            await OperationStateService.SaveOperationState(OperationState);
+            VisibleProductEdit = false;
+            CurrentProductsOpened = false;
+            RefreshPage(OperationState);
+        }
+
+        [RelayCommand]
+        private async Task DeleteProduct()
+        {
+            var deleteProduct = OperationState.CurrentProducts.Where(x => x.ProductId == ProductsBeingEdited.ProductId).FirstOrDefault();
+            OperationState.CurrentProducts.Remove(deleteProduct);
+            VisibleProductEdit = false;
+            VisibleCategoryEdit = false;
+            await OperationStateService.SaveOperationState(OperationState);
+            RefreshPage(OperationState);
+        }
+
+        #endregion
+
+        #region Modo de criação
+
         [RelayCommand(CanExecute = nameof(CheckNewCategory))]
         private async Task AddNewCategory()
         {
@@ -264,7 +512,8 @@ namespace SpotPdv.Application.ViewModels
                 Color = ColorCategorySelected,
                 Icon = IconSelected,
                 Image = ImageSelected,
-                IconChoose = ImageSelected == null ? true : false
+                IconChoose = ImageSelected == null ? true : false,
+                DateTimeCreate = DateTime.UtcNow
             };
 
             OperationState.CurrentCategories.Add(NewCategories);
@@ -284,7 +533,7 @@ namespace SpotPdv.Application.ViewModels
                 ReducedName = ReducedNameProduct,
                 Description = ProductDetails,
                 Barcode = BarCode,
-                Price = ProductPrice,
+                Price = Convert.ToDecimal(ProductPrice),
                 Discount = ProductDiscount,
                 IsAvailable = IsAvailable,
                 UnitType = Converters.UnityTypeConverter(UnitSelected),
@@ -308,9 +557,11 @@ namespace SpotPdv.Application.ViewModels
 
         private bool CheckNewProduct()
         {
-            if (string.IsNullOrEmpty(NameProduct) || ProductPrice == 0 ) return false;
+            if (string.IsNullOrEmpty(NameProduct)) return false;
             if (CategorySelected == null || string.IsNullOrEmpty(UnitSelected)) return false;
             return true;
         }
+
+        #endregion
     }
 }

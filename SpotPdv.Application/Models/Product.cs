@@ -46,5 +46,35 @@ namespace SpotPdv.Application.Models
 
         [ObservableProperty]
         private BackgroundCategoryModel _Color;
+
+        [ObservableProperty]
+        private DateTime _dateTimeCreate;
+
+        public Product Clone(Product original)
+        {
+            if (original == null)
+            {
+                return new Product();
+            }
+
+            return new Product
+            {
+                ProductId = original.ProductId,
+                CategoryId = original.CategoryId,
+                Name = original.Name,
+                ReducedName = original.ReducedName,
+                Category = original.Category,
+                Description = original.Description,
+                Barcode = original.Barcode,
+                UnitType = original.UnitType,
+                Price = original.Price,
+                Discount = original.Discount,
+                StockQuantity = original.StockQuantity,
+                IsAvailable = original.IsAvailable,
+                Image = original.Image,
+                Color = original.Color,
+                DateTimeCreate = original.DateTimeCreate
+            };
+        }
     }
 }

@@ -26,5 +26,27 @@ namespace SpotPdv.Application.Models
 
         [ObservableProperty]
         private bool _iconChoose;
+
+        [ObservableProperty]
+        private DateTime _dateTimeCreate;
+
+        public Category Clone(Category original)
+        {
+            if (original == null)
+            {
+                return new Category();
+            }
+
+            return new Category
+            {
+                CategoryId = original.CategoryId,
+                Name = original.Name,
+                Image = original.Image, 
+                Color = original.Color,
+                Icon = original.Icon,
+                IconChoose = original.IconChoose,
+                DateTimeCreate = original.DateTimeCreate
+            };
+        }
     }
 }

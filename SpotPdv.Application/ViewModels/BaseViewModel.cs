@@ -56,7 +56,7 @@ namespace SpotPdv.Application.ViewModels
 
         }
 
-        public virtual void RefreshPage(OperationStateModel operationStateModel)
+        public virtual void RefreshPage(OperationStateModel operationStateModel, bool filterForAZ = false)
         {
             OperationState = operationStateModel;
         }
@@ -72,10 +72,7 @@ namespace SpotPdv.Application.ViewModels
         private string _loadingMessage;
 
         [ObservableProperty]
-        private ObservableCollection<Category> _categoriesView;
-
-        [ObservableProperty]
-        private ObservableCollection<Product> _productsView;
+        private ObservableCollection<DataContainer> _conteinerView;
 
         public ObservableCollection<BackgroundCategoryModel> Colors = new ObservableCollection<BackgroundCategoryModel>
         {

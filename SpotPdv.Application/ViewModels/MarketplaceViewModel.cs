@@ -25,13 +25,12 @@ namespace SpotPdv.Application.ViewModels
         protected override void InitializeViewModel()
         {
             base.InitializeViewModel();
-            CategoriesView = OperationState.CurrentCategories;
             ViewModelIsInitialized = true;
         }
 
-        public override void RefreshPage(OperationStateModel operationStateModel)
+        public override void RefreshPage(OperationStateModel operationStateModel, bool filterForAZ = false)
         {
-            base.RefreshPage(operationStateModel);
+            base.RefreshPage(operationStateModel, filterForAZ);
             if (ViewModelIsInitialized)
             {
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="SpotPdv.Controls.ContextMenu"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Color="Transparent">
+    <Border
+        Padding="10"
+        BackgroundColor="White"
+        HorizontalOptions="Fill"
+        StrokeShape="RoundRectangle 10"
+        VerticalOptions="Fill">
+        <VerticalStackLayout x:Name="OptionsContainer" />
+    </Border>
+</toolkit:Popup>

@@ -19,6 +19,9 @@ namespace SpotPdv
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("FontAwesomeDuotone-Solid-900.otf", "AwesomeDuotone");
+                    fonts.AddFont("Poppins-Light.ttf", "PoppinsL");
+                    fonts.AddFont("Poppins-Regular.ttf", "PoppinsR");
+                    fonts.AddFont("Poppins-SemiBold.ttf", "PoppinsB");
                 })
                 .RegisterViewAndViewModel()
                 .ResgisterService();
